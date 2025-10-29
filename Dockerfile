@@ -6,9 +6,8 @@ ENV PORT=8080
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y gcc libmariadb-dev && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Use $PORT provided by Cloud Run. sh -c expands env vars.
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 main:app"]
